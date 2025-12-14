@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: telegram-creator-bot
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 main:app
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: GITHUB_REPO_OWNER
+        value: DarkLord813
+      - key: GITHUB_REPO_NAME
+        value: telegram-bot-backups
+      - key: GITHUB_BACKUP_BRANCH
+        value: main
+      - key: GITHUB_BACKUP_PATH
+        value: backups/masterbot
+      - key: STAR_PRICE
+        value: "200"
+      - key: ADMIN_TOKEN
+        generateValue: true
+    healthCheckPath: /health
+    autoDeploy: true
